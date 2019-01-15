@@ -59,12 +59,6 @@ describe('event emitter', () => {
 describe('event dispatcher', () => {
   it('single event of a type', () => {
     const bbox = canvas._cfg.el.getBoundingClientRect();
-    /* rect.on('click', function(event) {
-      clicked = true;
-      evt = event;
-      expect(event.x).to.equal(6);
-      expect(event.y).to.equal(6);
-    });*/
     Simulate.simulate(canvas._cfg.el, 'mousedown', {
       clientY: bbox.top + 5,
       clientX: bbox.left + 5
@@ -384,5 +378,19 @@ describe('event dispatcher', () => {
     expect(count).to.equal(1);
     circle.destroy();
     circle.emit('mousedown', { target: circle });
+  });
+  it('click canvas', () => {
+    let target = null;
+    canvas.on('click', e => { target = e.target; });
+    const bbox = canvas._cfg.el.getBoundingClientRect();
+    Simulate.simulate(canvas._cfg.el, 'mousedown', {
+      clientX: bbox.left + 200,
+      clientY: bbox.top + 200
+    });
+    Simulate.simulate(canvas._cfg.el, 'mouseup', {
+      clientX: bbox.left + 200,
+      clientY: bbox.top + 200
+    });
+    expect(target).to.equal(canvas);
   });
 });
